@@ -1,6 +1,6 @@
 // https://misskey.m544.net/docs/ja-JP/api
 // 12.39.1以降の認証はOAuthでなくMiAuthという独自手法を使うらしい。互換性皆無。
-class MisskeyAuthorizerV12 { // https://forum.misskey.io/d/6-miauth
+class MisskeyAuthorizerMiAuth { // https://forum.misskey.io/d/6-miauth
     constructor(domain='misskey.io', permissions=null) {
         const url = new URL(location.href)
         url.searchParams.delete('code');

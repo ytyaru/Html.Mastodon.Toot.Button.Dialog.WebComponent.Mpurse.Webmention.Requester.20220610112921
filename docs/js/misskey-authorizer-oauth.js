@@ -1,5 +1,5 @@
 // https://misskey.m544.net/docs/ja-JP/api
-class MisskeyAuthorizerV11 {
+class MisskeyAuthorizerOAuth {
     constructor(domain='misskey.dev', permissions=null) {
         const url = new URL(location.href)
         url.searchParams.delete('code');
