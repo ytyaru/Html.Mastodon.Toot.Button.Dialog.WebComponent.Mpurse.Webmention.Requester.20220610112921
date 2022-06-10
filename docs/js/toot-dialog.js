@@ -79,6 +79,15 @@ class TootDialog extends HTMLElement {
     overflow: visible;
     cursor: pointer;
 }
+.button-table {
+    text-align: center;
+    vertical-align: center;
+}
+#toot-dialog-close, #toot-dialog-close > span {
+    text-align: center;
+    vertical-align: center;
+    font-size: ${this.imgSize}px;
+}
 `
     }
     #cssButton() { return `
@@ -207,19 +216,37 @@ button:focus, button:focus img {
         const remaining = document.createElement('span')
         remaining.setAttribute('id', 'status-remaining')
 
-        // ボタン生成
-        const buttons = []
+        const table = document.createElement('table')
+        table.classList.add('button-table')
+        const trB = document.createElement('tr')
+        const trD = document.createElement('tr')
+        trB.innerHTML += `<td rowspan="2">${remaining.outerHTML}</td>`
         for (const domain of this.domain) {
-            buttons.push(`<toot-button domain="${domain}"></toot-button>`)
+            const tdB = document.createElement('td')
+            tdB.innerHTML = `<toot-button domain="${domain}"></toot-button>`
+            trB.appendChild(tdB)
+            const tdD = document.createElement('td')
+            tdD.appendChild(this.#makeNewTabLink(`https://${domain}/`, domain, domain))
+            trD.appendChild(tdD)
         }
-        buttons.push(`<toot-button></toot-button>`)
-        buttons.push(`<button id="toot-dialog-close"><span style="font-size:${this.imgSize}px;">❌</span></button>`)
-
+        trB.innerHTML += `<td><toot-button></toot-button></td>`
+        trD.innerHTML += '<td>' + this.#makeNewTabLink('https://www.fediverse.space/instances', 'インスタンス一覧（一覧にはマストドン以外のfediverseなサーバも含む。マストドンだけの一覧はない）', '他').outerHTML + '</td>'
+        trB.innerHTML += `<td rowspan="2"><button id="toot-dialog-close" title="閉じる"><span>❌</span></button></td>`
+        table.appendChild(trB)
+        table.appendChild(trD)
         form.appendChild(status)
-        form.appendChild(remaining)
-        form.innerHTML += buttons.join('')
+        form.appendChild(table)
         dialog.appendChild(form)
         return dialog
+    }
+    #makeNewTabLink(href, title, content) {
+        const a = document.createElement('a')
+        if (href) { a.setAttribute('href', href) }
+        if (title) { a.setAttribute('title', title) }
+        if (content) { a.innerHTML = content }
+        a.setAttribute('target', '_blank') 
+        a.setAttribute('rel', 'noopener noreferrer')
+        return a
     }
     #addListenerEvent(shadow) { // トゥートボタンを押したときの動作を実装する
         console.debug(this.shadowRoot)
