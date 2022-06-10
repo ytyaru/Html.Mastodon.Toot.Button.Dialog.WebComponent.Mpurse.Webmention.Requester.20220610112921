@@ -25,8 +25,8 @@ class TootButton extends HTMLElement {
     async connectedCallback() {
         //const shadow = this.attachShadow({ mode: 'closed' });
         const shadow = this.attachShadow({ mode: 'open' }); // マウスイベント登録に必要だった。CSS的にはclosedにしたいのに。
-        const gen = TootButtonGenerator(this.domain, this.imgSrc, this.imgSize, this.title)
-        shadow.innerHTML = gen.generate()
+        const gen = new TootButtonGenerator(this.domain, this.imgSrc, this.imgSize, this.title)
+        shadow.innerHTML = await gen.generate()
         this.shadowRoot.querySelector('img').addEventListener('animationend', (e)=>{ e.target.classList.remove('jump'); e.target.classList.remove('flip'); }, false);
         this.#addListenerEvent()
         this.#redirectCallback()
@@ -111,7 +111,7 @@ class TootButton extends HTMLElement {
         this.domain = domain
         console.debug(domain)
         const access_token = sessionStorage.getItem(`${domain}-access_token`)
-        if (access_token && tooter.verify(access_token)) {
+        if (access_token) {
             console.debug('既存のトークンが有効なため即座にトゥートします。');
             if (!this._client) {
                 this._client = new MastodonApiClient(this.domain, access_token)
@@ -132,7 +132,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
     customElements.define('toot-button', TootButton);
 });
 class TootButtonGenerator {
-    generate(domain, imgSrc, imgSize, title) {
+    constructor(domain, imgSrc, imgSize, title) {
+        this.domain = domain
+        this.imgSrc = imgSrc
+        this.imgSize = imgSize
+        this.title = title
+    }
+    async generate() {
         const button = await this.#make()
         return `<style>${this.#cssBase()}${this.#cssButton()}${this.#cssAnimation()}${this.#cssFocsAnimation()}</style>${button.outerHTML}` 
     }
@@ -210,6 +216,7 @@ button:focus, button:focus img {
   vertical-align:bottom;
 }
 `
+    }
     async #make() {
         const button = await this.#makeSendButton()
         const img = this.#makeSendButtonImg()
