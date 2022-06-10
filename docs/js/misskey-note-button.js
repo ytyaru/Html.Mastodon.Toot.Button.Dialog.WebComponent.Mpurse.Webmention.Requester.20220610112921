@@ -38,7 +38,7 @@ class MisskeyNoteButton extends HTMLElement {
         else { this[property] = newValue; }
     }
     #getAuthorizer() { // ミスキーv12.39以降とそれ以前では認証方法が違うため必要。本当はversionをAPIで取得して判定させたかったが、versionを取得できなかったため諦めた。
-        return ('misskey.io' == this.domain) ? new MisskeyAuthorizerV12(this.domain) : new MisskeyAuthorizerV11(this.domain)
+        return ('misskey.io' == this.domain) ? new MisskeyAuthorizerMiAuth(this.domain) : new MisskeyAuthorizerOAuth(this.domain)
     }
     #error(e) {
         console.error(e)
