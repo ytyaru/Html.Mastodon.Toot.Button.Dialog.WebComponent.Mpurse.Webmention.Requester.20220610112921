@@ -99,7 +99,6 @@ class TootButton extends HTMLElement {
         const status = this.#getStatus()
         console.debug(status)
         if (!status || 0 === status.trim().length) {
-            //this.#toast('トゥート内容を入れてください。', true)
             Toaster.toast('トゥート内容を入れてください。', true)
             return
         }

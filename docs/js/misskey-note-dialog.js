@@ -269,9 +269,9 @@ button:focus, button:focus img {
                 console.debug(event)
                 console.debug(event.detail)
                 console.debug(JSON.stringify(event.detail))
-                if (event.detail.hasOwnProperty('error')) { this.#toast('ノートに失敗しました……') }
+                if (event.detail.hasOwnProperty('error')) { Toaster.toast('ノートに失敗しました……') }
                 else {
-                    this.#toast('ノートしました！')
+                    Toaster.toast('ノートしました！')
                     this.shadowRoot.getElementById('misskey-note-dialog').close()
                     console.debug(event.target)
                     console.debug(event.detail)
@@ -328,11 +328,6 @@ button:focus, button:focus img {
         range.collapse(true)
         sel.removeAllRanges()
         sel.addRange(range)
-    }
-    #toast(message) {
-        console.debug(message)
-        if (Toastify) { Toastify({text: message, position:'center'}).showToast(); }
-        else { alert(message) }
     }
 }
 window.addEventListener('DOMContentLoaded', (event) => {

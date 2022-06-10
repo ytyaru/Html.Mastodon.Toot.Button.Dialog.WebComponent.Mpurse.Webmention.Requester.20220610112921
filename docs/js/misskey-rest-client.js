@@ -18,7 +18,7 @@ class MisskeyRestClient {
     #error(json) {
         console.debug(json)
         if (json.hasOwnProperty('error')) {
-            this.#toast(json.error, true)
+            Toaster.toast(json.error, true)
             //sessionStorage.removeItem(`${domain}-app`, JSON.stringify(app));
             sessionStorage.removeItem(`${domain}-id`, app.client_id);
             sessionStorage.removeItem(`${domain}-secret`, app.client_secret);
@@ -26,15 +26,5 @@ class MisskeyRestClient {
             sessionStorage.removeItem(`${domain}-accessToken`, json.accessToken);
             throw new Error(`misskey APIでエラーがありました。詳細はデバッグログを参照してください。: ${JSON.stringify(json)}`)
         }
-    }
-    #toast(message, error=false) {
-        console.debug(message)
-        const options = {
-            text: message, 
-            position:'center'
-        }
-        if (error) { options.style = { background: "red" } }
-        if (Toastify) { Toastify(options).showToast(); }
-        else { alert(message) }
     }
 }
