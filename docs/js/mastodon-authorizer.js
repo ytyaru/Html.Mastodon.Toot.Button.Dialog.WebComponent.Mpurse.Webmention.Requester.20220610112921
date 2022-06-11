@@ -5,7 +5,8 @@ class MastodonAuthorizer {
         this.redirect_uri = url.href
         this.domain = domain
         //this.scope = 'read write follow push'
-        this.scope = 'write:statuses'
+        //this.scope = 'write:statuses'
+        this.scope = scope
         this.client = new MastodonRestClient(this.domain)
     }
     async authorize(status) {
